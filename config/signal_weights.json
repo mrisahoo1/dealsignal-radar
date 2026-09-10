@@ -1,0 +1,49 @@
+{
+  "version": "hypotheses-v1-stage-v1",
+  "demo_default_company_id": "northmere",
+  "stage_rules": {
+    "max_age_days": 180,
+    "minimum_strength": 0.5,
+    "minimum_source_quality": 0.7,
+    "emerging_min_signal_types": 3,
+    "emerging_min_categories": 3,
+    "emerging_min_source_families": 3
+  },
+  "as_of": "2026-09-10",
+  "period_days": 30,
+  "half_life_days": 180,
+  "normalization_scale": 65,
+  "supported_type_minimum": 15,
+  "source_quality": {"registry": 1.0, "company": 0.95, "sponsor": 0.85, "news": 0.8, "trade": 0.7, "unverified": 0.5},
+  "confidence": {
+    "weights": {"quality": 0.25, "independence": 0.2, "recency": 0.15, "breadth": 0.1, "agreement": 0.1, "completeness": 0.2},
+    "source_target": 4, "category_target": 4,
+    "single_source_cap": 45, "two_source_cap": 68,
+    "high_threshold": 75, "medium_threshold": 50
+  },
+  "actions": {"priority_1": 55, "priority_2": 30, "watchlist": 12, "priority_1_min_confidence": 75},
+  "signals": {
+    "strategic_review": {"process_level": true, "label": "Strategic alternatives review", "category": "direct_intent", "weight": 120, "direction": 1, "relevance": {"sale_buyout": 1, "ipo": 0.15, "refinancing": 0.15}},
+    "sale_reporting": {"process_level": true, "label": "Sale process reporting", "category": "direct_intent", "weight": 150, "direction": 1, "relevance": {"sale_buyout": 1, "ipo": 0, "refinancing": 0}},
+    "ipo_preparation": {"process_level": true, "label": "Public IPO preparation", "category": "direct_intent", "weight": 140, "direction": 1, "relevance": {"sale_buyout": 0.1, "ipo": 1, "refinancing": 0}},
+    "adviser_engaged": {"label": "Public adviser engagement", "category": "direct_intent", "weight": 38, "direction": 1, "relevance": {"sale_buyout": 0.9, "ipo": 0.5, "refinancing": 0.2}},
+    "sponsor_tenure": {"label": "Mature sponsor holding", "category": "ownership_exit_readiness", "weight": 25, "direction": 1, "relevance": {"sale_buyout": 1, "ipo": 0.4, "refinancing": 0.3}},
+    "debt_maturity": {"label": "Approaching debt maturity", "category": "capital_structure", "weight": 100, "direction": 1, "relevance": {"sale_buyout": 0.2, "ipo": 0, "refinancing": 1}},
+    "refinancing_mandate": {"process_level": true, "label": "Refinancing mandate", "category": "capital_structure", "weight": 115, "direction": 1, "relevance": {"sale_buyout": 0, "ipo": 0, "refinancing": 1}},
+    "new_charge": {"label": "New security / charge filing", "category": "capital_structure", "weight": 24, "direction": 1, "relevance": {"sale_buyout": 0.1, "ipo": 0, "refinancing": 1}},
+    "finance_hire": {"label": "Finance leadership change", "category": "governance_management", "weight": 17, "direction": 1, "relevance": {"sale_buyout": 0.7, "ipo": 1, "refinancing": 0.4}},
+    "board_change": {"label": "Board / governance change", "category": "governance_management", "weight": 13, "direction": 1, "relevance": {"sale_buyout": 0.7, "ipo": 1, "refinancing": 0.2}},
+    "growth": {"label": "Operating expansion", "category": "financial_operational_momentum", "weight": 12, "direction": 1, "relevance": {"sale_buyout": 0.6, "ipo": 0.8, "refinancing": 0.3}},
+    "fundraise": {"label": "Ordinary funding round", "category": "funding_capital", "weight": 8, "direction": 1, "relevance": {"sale_buyout": 0.3, "ipo": 0.3, "refinancing": 0.1}},
+    "consolidation": {"label": "Sector consolidation", "category": "market_sector_context", "weight": 9, "direction": 1, "relevance": {"sale_buyout": 1, "ipo": 0, "refinancing": 0}},
+    "sale_denied": {"label": "Sale process explicitly denied", "category": "negative_or_contradictory", "weight": 95, "direction": -1, "relevance": {"sale_buyout": 1, "ipo": 0, "refinancing": 0}},
+    "ipo_delayed": {"label": "IPO plans postponed", "category": "negative_or_contradictory", "weight": 105, "direction": -1, "relevance": {"sale_buyout": 0, "ipo": 1, "refinancing": 0}},
+    "debt_runway": {"label": "Long-dated debt runway", "category": "negative_or_contradictory", "weight": 85, "direction": -1, "relevance": {"sale_buyout": 0, "ipo": 0, "refinancing": 1}},
+    "steady_trading": {"label": "Stable trading; no catalyst", "category": "financial_operational_momentum", "weight": 0, "direction": 1, "relevance": {"sale_buyout": 0, "ipo": 0, "refinancing": 0}}
+  },
+  "interactions": [
+    {"name": "Exit readiness + direct intent", "signals": ["sponsor_tenure", "strategic_review"], "transaction": "sale_buyout", "bonus": 10},
+    {"name": "IPO preparation + finance hire", "signals": ["ipo_preparation", "finance_hire"], "transaction": "ipo", "bonus": 8},
+    {"name": "Maturity + refinancing mandate", "signals": ["debt_maturity", "refinancing_mandate"], "transaction": "refinancing", "bonus": 8}
+  ]
+}
